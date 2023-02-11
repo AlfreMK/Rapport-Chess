@@ -91,7 +91,7 @@ class RapportChess extends Component {
       onDrop: this.onDrop,
       allowDrag: this.allowDrag,
     //   onSquareRightClick: this.onSquareRightClick,
-      rapportEnabled: this.rapportEnabled,
+      rapportEnabled: this.rapportEnabled, // TODO: see if works
     });
   }
 }
@@ -104,7 +104,7 @@ const moveIsLegalByRapport = (move, chess, trackOfPieces) => {  // by rapport ch
     const turn = move.color;
     const originRank = parseInt(move.lan[1]);
     const destinationRank = parseInt(move.lan[3]);
-    const piece = trackOfPieces.find(piece => piece.square === move.from);
+    const piece = trackOfPieces.find(piece => piece.square === move.from && piece.color === move.color);
     if (piece === undefined) {  // if the piece is not in the trackOfPieces array, it can move anywhere
         return true;
     }
