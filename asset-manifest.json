@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/Rapport-Chess/static/css/main.2a1aecb3.css",
-    "main.js": "/Rapport-Chess/static/js/main.17f98b44.js",
+    "main.js": "/Rapport-Chess/static/js/main.7a2ac8bf.js",
     "static/js/787.b773189a.chunk.js": "/Rapport-Chess/static/js/787.b773189a.chunk.js",
     "index.html": "/Rapport-Chess/index.html",
     "main.2a1aecb3.css.map": "/Rapport-Chess/static/css/main.2a1aecb3.css.map",
-    "main.17f98b44.js.map": "/Rapport-Chess/static/js/main.17f98b44.js.map",
+    "main.7a2ac8bf.js.map": "/Rapport-Chess/static/js/main.7a2ac8bf.js.map",
     "787.b773189a.chunk.js.map": "/Rapport-Chess/static/js/787.b773189a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.2a1aecb3.css",
-    "static/js/main.17f98b44.js"
+    "static/js/main.7a2ac8bf.js"
   ]
 }
