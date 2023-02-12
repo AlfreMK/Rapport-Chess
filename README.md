@@ -4,3 +4,4 @@ Inspired in [Richard Rapport's](https://en.wikipedia.org/wiki/Richard_Rapport) a
 - All pieces (except the king) move like standard chess, with the restriction that they only move foward.
 - When a piece reach the 7th rank, then they can move foward or backwards for the rest of the game.
 
+You can access to the app [here](https://alfremk.github.io/Rapport-Chess/).
