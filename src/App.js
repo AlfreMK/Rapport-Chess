@@ -6,6 +6,10 @@ import Rules from './components/Rules';
 import MovesTable from './components/MovesTable';
 import styled from 'styled-components';
 import { transformArrayToPGN, transformMovesInArray } from './functions/chessFunctions';
+import Switch from '@mui/material/Switch';
+import ScreenRotationAltIcon from '@mui/icons-material/ScreenRotationAlt';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+
 // import chessHook from "./hooks/puzzle.js";
 
 function App() {
@@ -44,15 +48,16 @@ function App() {
   return (
     <CenterContainer>
     <Container>
-        <div>
+        <LeftContainer>
           <Rules />
           {/* <button>
                 Reset position
           </button> */}
-          <button onClick={() => updateProps("rapportDisabled")}>
-            Rapport {props.rapportDisabled ? "Disabled" : "Enabled"}
-          </button>
-        </div>
+          <SwitchContainer>
+            <span>Rapport Mode</span>
+            <Switch defaultChecked onClick={() => updateProps("rapportDisabled")}></Switch>
+          </SwitchContainer>
+        </LeftContainer>
         <BorderChessBoard>
           <RapportChessBoard
               calcWidth={({ screenWidth }) => {
@@ -65,21 +70,21 @@ function App() {
               // position={props.position}
             />
         </BorderChessBoard>
-        <div>
+        <RightContainer>
+          <Button onClick={() => updateProps("orientation")}>
+            <ScreenRotationAltIcon fontSize='small' className='icon-styled'/>Flip Board
+          </Button>
+          <Button onClick={(event)=>{event.preventDefault();navigator.clipboard.writeText(transformArrayToPGN(props.history));}}>
+            <ContentCopyIcon fontSize='small' className='icon-styled'/>Copy PGN to Clipboard
+          </Button>
           <MovesTable history={transformMovesInArray(props.history)} />
-          <button onClick={() => updateProps("orientation")}>
-            Flip Board
-          </button>
-          <button onClick={(event)=>{event.preventDefault();navigator.clipboard.writeText(transformArrayToPGN(props.history));}}>
-            Copy PGN to Clipboard
-          </button>
-        </div>
+        </RightContainer>
     </Container>
     <Footer>
-      Made by <a href="https://github.com/AlfreMK"> Alfredo Medina</a>.
-      Inspired by <a href="https://www.jairtrejo.com/"> Jair Trejo</a>,
-      <a href="https://www.youtube.com/@Ajedrezconmiguelito"> GM Miguel Santos </a>
-      and <a href="https://www.youtube.com/@gmgascon">GM José Gascón</a>.
+      Made by <Link href="https://github.com/AlfreMK"> Alfredo Medina</Link>.
+      Inspired by <Link href="https://www.jairtrejo.com/"> Jair Trejo</Link>,
+      <Link href="https://www.youtube.com/@Ajedrezconmiguelito"> GM Miguel Santos </Link>
+      and <Link href="https://www.youtube.com/@gmgascon">GM José Gascón</Link>.
     </Footer>
     </CenterContainer>
   );
@@ -101,7 +106,6 @@ const Container = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    background-color: #f5f5f5;
     padding: 2%;
     margin: 2%;
     margin-right: 5%;
@@ -110,9 +114,66 @@ const Container = styled.div`
 
 const BorderChessBoard = styled.div`
     padding: 5px;
-    background-color: #481d24;
+    background-color: #373531;
     margin: 5px;
 `;
 
 const Footer = styled.footer`
+    margin-bottom: 50px;
 `
+
+const SwitchContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: #373531;
+    min-width: 250px;
+`;
+
+const LeftContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px;
+    margin-top: 10px;
+`;
+
+const Link = styled.a`
+    color: #4183c4;
+    text-decoration: none;
+    font-weight: bold;
+    &:hover {
+        text-decoration: underline;
+    }
+`;
+
+const RightContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px;
+    margin-top: 30px;
+    min-width: 300px;
+`;
+
+const Button = styled.button`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: #373531;
+    font-weight: bold;
+    color: #bababa;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    min-width: 250px;
+    &:hover {
+        background-color: #2d5b7c;
+    }
+`;

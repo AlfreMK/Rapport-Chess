@@ -14,9 +14,9 @@ const MovesTable = (props) => {
                 {movesTable.map((move, index) => {
                     return (
                         <tr key={index}>
-                            <Td>{index + 1}</Td>
-                            <Td>{move.white}</Td>
-                            <Td>{move.black}</Td>
+                            <TdNumber>{index + 1}</TdNumber>
+                            <TdMove>{move.white}</TdMove>
+                            <TdMove>{move.black}</TdMove>
                         </tr>
                     )
                 })
@@ -40,9 +40,20 @@ const Th = styled.th`
     margin: 2%;
     max-width: 100px;
 `;
-const Td = styled.td`
-    border: 1px solid black;
-    border-collapse: collapse;
+
+const TdNumber = styled.td`
+    background-color: #302e2c;
+    padding: 5px;
+    min-width: 40px;
+    text-align: center;
+    border: 1px solid #404040;
+`;
+
+const TdMove = styled.td`
+    background-color: #262421;
+    border: 1px solid #262421;
     margin: 2%;
-    max-width: 100px;
+    padding: 5px;
+    padding-left: 10px;
+    min-width: 90px;
 `;
