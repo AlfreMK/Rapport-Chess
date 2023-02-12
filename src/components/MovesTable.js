@@ -34,12 +34,6 @@ const Table = styled.table`
     margin: 2%;
     max-width: 100px;
 `;
-const Th = styled.th`
-    border: 1px solid black;
-    border-collapse: collapse;
-    margin: 2%;
-    max-width: 100px;
-`;
 
 const TdNumber = styled.td`
     background-color: #302e2c;

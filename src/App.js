@@ -47,6 +47,7 @@ function App() {
 
   return (
     <CenterContainer>
+      <h2>Rapport Chess</h2>
     <Container>
         <LeftContainer>
           <Rules />
@@ -60,9 +61,6 @@ function App() {
         </LeftContainer>
         <BorderChessBoard>
           <RapportChessBoard
-              calcWidth={({ screenWidth }) => {
-                return Math.min(screenWidth - 32 - 8, 560);
-              }}
               rapportDisabled={props.rapportDisabled}
               orientation={props.orientation}
               history={props.history}
@@ -106,8 +104,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    padding: 2%;
-    margin: 2%;
+    justify-content: center;
     margin-right: 5%;
     margin-left: 5%;
 `;
@@ -119,7 +116,13 @@ const BorderChessBoard = styled.div`
 `;
 
 const Footer = styled.footer`
+    margin: 10px;
+    margin-top: 30px;
     margin-bottom: 50px;
+    text-align: center;
+    @media (max-width: 640px) { 
+      font-size: 0.8em;
+    }
 `
 
 const SwitchContainer = styled.div`
@@ -139,6 +142,9 @@ const LeftContainer = styled.div`
     align-items: center;
     margin: 5px;
     margin-top: 10px;
+    @media (max-width: 640px) { 
+      order: 2;
+    }
 `;
 
 const Link = styled.a`
