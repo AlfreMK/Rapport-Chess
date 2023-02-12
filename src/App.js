@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import RapportChessBoard from './integrations/RapportChess';
 import Rules from './components/Rules';
 import MovesTable from './components/MovesTable';
