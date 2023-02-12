@@ -1,5 +1,3 @@
-import logo from './logo.svg';
-import './App.css';
 import { useState, useEffect } from "react";
 import RapportChessBoard from './integrations/RapportChess';
 import Rules from './components/Rules';
@@ -10,7 +8,6 @@ import Switch from '@mui/material/Switch';
 import ScreenRotationAltIcon from '@mui/icons-material/ScreenRotationAlt';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
-// import chessHook from "./hooks/puzzle.js";
 
 function App() {
 
@@ -18,6 +15,7 @@ function App() {
     position: "start",
     rapportDisabled: false,
     orientation: "white",
+    playYourself: false,
     history: [],
   });
 
@@ -32,18 +30,24 @@ function App() {
       case "orientation":
         setProps({...props, orientation: props.orientation === "white" ? "black" : "white"});
         break;
+      case "playYourself":
+        setProps({...props, playYourself: !props.playYourself});
+        break;
       default:
         setProps({...props, position: "start", rapportDisabled: false, orientation: "white"});
     }
   }
-
-  // useEffect(() => {
-  //   if (props.history.length % 2 === 1) {
-  //     setProps({...props, orientation: "black"});
-  //   } else {
-  //     setProps({...props, orientation: "white"});
-  //   }
-  // }, [props]);
+  
+  const updatePropsFromHistory = (history) => {
+    setProps({...props, history: history})
+    if (props.playYourself) {
+      if (history.length % 2 === 1) {
+        setProps({...props, orientation: "black"});
+      } else {
+        setProps({...props, orientation: "white"});
+      }
+    }
+  }
 
   return (
     <CenterContainer>
@@ -55,8 +59,12 @@ function App() {
                 Reset position
           </button> */}
           <SwitchContainer>
-            <span>Rapport Mode</span>
+            <SpanSwitch>Rapport Mode</SpanSwitch>
             <Switch defaultChecked onClick={() => updateProps("rapportDisabled")}></Switch>
+          </SwitchContainer>
+          <SwitchContainer>
+            <SpanSwitch>Play Yourself Mode</SpanSwitch>
+            <Switch onClick={() => updateProps("playYourself")}></Switch>
           </SwitchContainer>
         </LeftContainer>
         <BorderChessBoard>
@@ -64,7 +72,7 @@ function App() {
               rapportDisabled={props.rapportDisabled}
               orientation={props.orientation}
               history={props.history}
-              parentSetHistory={(history) => setProps({...props, history: history})}
+              parentSetHistory={(history) => updatePropsFromHistory(history)}
               // position={props.position}
             />
         </BorderChessBoard>
@@ -123,15 +131,20 @@ const Footer = styled.footer`
     @media (max-width: 640px) { 
       font-size: 0.8em;
     }
-`
+`;
+
+const SpanSwitch = styled.span`
+    margin-left: 15px;
+`;
 
 const SwitchContainer = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     border-radius: 10px;
     padding: 5px;
+    margin: 7px;
     background-color: #373531;
     min-width: 250px;
 `;
