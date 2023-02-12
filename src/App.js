@@ -98,8 +98,6 @@ function App() {
 
 export default App;
 
-// https://github.com/jairtrejo/knight-moves/blob/main/src/hooks/usePuzzle.ts
-
 
 const CenterContainer = styled.div`
     display: flex;
