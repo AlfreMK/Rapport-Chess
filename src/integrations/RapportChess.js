@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Chess } from "chess.js"; // import Chess from  "chess.js"(default) if recieving an error about new Chess() not being a constructor
 
@@ -8,10 +8,8 @@ import Chessboard from "chessboardjsx";
 // code extracted and adapted from https://codesandbox.io/s/x332zqpkl4?from-embed=&file=/src/integrations/WithMoveValidation.js
 class RapportChess extends Component {
   static propTypes = { children: PropTypes.func };
-
   state = {
-    fen: "start",
-    // array of past game moves
+    fen: this.props.position,
     trackOfPieces:     // pieces that had arrived the 7th rank
         [
             {square: "a1", color: "w", piece: "qR", hasArrived: false},
@@ -31,8 +29,8 @@ class RapportChess extends Component {
             {square: "g8", color: "b", piece: "N", hasArrived: false},
             {square: "h8", color: "b", piece: "R", hasArrived: false},
         ],
-    history: [],
-    rapportEnabled: true
+    // array of past game moves
+    history: this.props.history,
   };
 
   componentDidMount() {
@@ -59,7 +57,7 @@ class RapportChess extends Component {
             to: targetSquare,
             promotion: "q" // always promote to a queen for example simplicity
         });
-        if (moveIsLegalByRapport(move, this.game, this.state.trackOfPieces) || !this.state.rapportEnabled) {
+        if (moveIsLegalByRapport(move, this.state.trackOfPieces) || this.props.rapportDisabled) {
             move = this.game.move({
                 from: sourceSquare,
                 to: targetSquare,
@@ -67,9 +65,11 @@ class RapportChess extends Component {
             });
             this.setState(({ history }) => ({
                 fen: this.game.fen(),
-                history: this.game.history({ verbose: true }),
+                history: history.concat(move.san),
                 trackOfPieces: updateTrackOfPieces(this.state.trackOfPieces, move)
-            }));
+            }
+            ));
+            this.props.parentSetHistory(this.state.history.concat(move.san));
         }
     }
     catch(err){
@@ -91,13 +91,12 @@ class RapportChess extends Component {
       onDrop: this.onDrop,
       allowDrag: this.allowDrag,
     //   onSquareRightClick: this.onSquareRightClick,
-      rapportEnabled: this.rapportEnabled, // TODO: see if works
     });
   }
 }
 
 
-const moveIsLegalByRapport = (move, chess, trackOfPieces) => {  // by rapport chess rules
+const moveIsLegalByRapport = (move, trackOfPieces) => {  // by rapport chess rules
     if (move.san[0] === "K") {  // king can move anywhere
         return true;
     }
@@ -134,12 +133,22 @@ const updateTrackOfPieces = (trackOfPieces, move) => {
     };
 
 export default function RapportChessBoard(props) {
+  const position = props.position || "start";
+
   return (
-    <RapportChess>
-      {chessProps => (
+    <RapportChess
+      position={position}
+      rapportDisabled={props.rapportDisabled}
+      parentSetHistory={props.parentSetHistory}
+      history={props.history}
+      >
+      {({ position, onDrop, allowDrag }) => (
         <Chessboard
-          {...chessProps}
-          width={props.calcWidth({ screenWidth: window.innerWidth })}
+          position={position}
+          onDrop={onDrop}
+          allowDrag={allowDrag}
+          orientation={props.orientation}
+
         />
       )}
     </RapportChess>
