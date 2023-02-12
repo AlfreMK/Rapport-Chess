@@ -5,7 +5,7 @@ import { Chess } from "chess.js"; // import Chess from  "chess.js"(default) if r
 import Chessboard from "chessboardjsx";
 
 
-// code extracted and adapted from https://codesandbox.io/s/x332zqpkl4?from-embed=&file=/src/integrations/WithMoveValidation.js
+// code extracted and adapted from https://chessboardjsx.com/integrations/move-validation
 class RapportChess extends Component {
   static propTypes = { children: PropTypes.func };
   state = {
@@ -29,9 +29,35 @@ class RapportChess extends Component {
             {square: "g8", color: "b", piece: "N", hasArrived: false},
             {square: "h8", color: "b", piece: "R", hasArrived: false},
         ],
+    squareStyles: {},
     // array of past game moves
     history: this.props.history,
   };
+
+  highlightSquare = (square) => {
+    const highlightStyles = [square].reduce((a, c) => {
+      return {
+        ...a,
+        ...{
+          [c]: {
+            background: "radial-gradient(circle, red 40%, transparent 60%)",
+            borderRadius: "50%"
+          }
+        }
+      };
+    }, {});
+
+    this.setState(({ squareStyles }) => ({
+      squareStyles: { ...squareStyles, ...highlightStyles }
+    }));
+  };
+
+
+    removeHighlightSquare = () => {
+      this.setState(({ pieceSquare }) => ({
+        squareStyles: {},
+      }));
+    };
 
   componentDidMount() {
     this.game = new Chess();
@@ -66,10 +92,16 @@ class RapportChess extends Component {
             this.setState(({ history }) => ({
                 fen: this.game.fen(),
                 history: history.concat(move.san),
-                trackOfPieces: updateTrackOfPieces(this.state.trackOfPieces, move)
+                trackOfPieces: updateTrackOfPieces(this.state.trackOfPieces, move),
             }
             ));
             this.props.parentSetHistory(this.state.history.concat(move.san));
+            if (this.game.inCheck()) {
+                this.highlightSquare(squareKing(this.game.turn(), this.state.trackOfPieces));
+            }
+            else {
+                this.removeHighlightSquare();
+            }
         }
     }
     catch(err){
@@ -78,19 +110,20 @@ class RapportChess extends Component {
     }
   };
 
-//   onSquareRightClick = square =>
-//     this.setState({
-//       squareStyles: { [square]: { backgroundColor: "deepPink" } }
-//     });
+  onSquareRightClick = square =>
+    this.setState({
+      squareStyles: { [square]: { backgroundColor: "rgba(255, 255, 0, 0.4)" } }
+    });
 
   render() {
-    const { fen } = this.state;
+    const { fen, squareStyles } = this.state;
 
     return this.props.children({
+      squareStyles,
       position: fen,
       onDrop: this.onDrop,
       allowDrag: this.allowDrag,
-    //   onSquareRightClick: this.onSquareRightClick,
+      onSquareRightClick: this.onSquareRightClick,
     });
   }
 }
@@ -131,6 +164,12 @@ const updateTrackOfPieces = (trackOfPieces, move) => {
     });
     return newTrackOfPieces;
     };
+  
+const squareKing = (turn, trackOfPieces) => {
+    const enemyKing = trackOfPieces.find(piece => piece.piece === "K" && piece.color === turn);
+    return enemyKing.square;
+    };
+    
 
 export default function RapportChessBoard(props) {
   const position = props.position || "start";
@@ -142,12 +181,19 @@ export default function RapportChessBoard(props) {
       parentSetHistory={props.parentSetHistory}
       history={props.history}
       >
-      {({ position, onDrop, allowDrag }) => (
+      {({
+        position,
+        onDrop,
+        allowDrag,
+        onSquareRightClick,
+        squareStyles }) => (
         <Chessboard
           position={position}
           onDrop={onDrop}
           allowDrag={allowDrag}
           orientation={props.orientation}
+          squareStyles={squareStyles}
+          onSquareRightClick={onSquareRightClick}
           calcWidth={({ screenWidth }) => {
             return Math.min(screenWidth - 32 - 8, 560);
           }}
