@@ -50,12 +50,6 @@ function transformNotation(move){
         }
     }
     return newMove;
-
-
-
-    
-
-
 }
 
 

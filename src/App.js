@@ -12,7 +12,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 function App() {
 
   const [props, setProps] = useState({
-    position: "start",
+    position: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     rapportDisabled: false,
     orientation: "white",
     playYourself: false,
@@ -22,7 +22,7 @@ function App() {
   const updateProps = (newProps) => {
     switch (newProps) {
       case "position":
-        setProps({...props, position: "start"});
+        setProps({...props, position: "start", history: [], orientation: "white"});
         break;
       case "rapportDisabled":
         setProps({...props, rapportDisabled: !props.rapportDisabled});
@@ -38,8 +38,8 @@ function App() {
     }
   }
   
-  const updatePropsFromHistory = (history) => {
-    setProps({...props, history: history})
+  const updatePropsChild = (history, position) => {
+    setProps({...props, history: history, position: position})
     if (props.playYourself) {
       if (history.length % 2 === 1) {
         setProps({...props, orientation: "black"});
@@ -55,9 +55,6 @@ function App() {
     <Container>
         <LeftContainer>
           <Rules />
-          {/* <button>
-                Reset position
-          </button> */}
           <SwitchContainer>
             <SpanSwitch>Rapport Mode</SpanSwitch>
             <Switch defaultChecked onClick={() => updateProps("rapportDisabled")}></Switch>
@@ -66,14 +63,15 @@ function App() {
             <SpanSwitch>Play Yourself Mode</SpanSwitch>
             <Switch onClick={() => updateProps("playYourself")}></Switch>
           </SwitchContainer>
+
         </LeftContainer>
         <BorderChessBoard>
           <RapportChessBoard
               rapportDisabled={props.rapportDisabled}
               orientation={props.orientation}
               history={props.history}
-              parentSetHistory={(history) => updatePropsFromHistory(history)}
-              // position={props.position}
+              position={props.position}
+              parentSetProps={(history, position) => updatePropsChild(history, position)}
             />
         </BorderChessBoard>
         <RightContainer>
@@ -81,7 +79,10 @@ function App() {
             <ScreenRotationAltIcon fontSize='small' className='icon-styled'/>Flip Board
           </Button>
           <Button onClick={(event)=>{event.preventDefault();navigator.clipboard.writeText(transformArrayToPGN(props.history));}}>
-            <ContentCopyIcon fontSize='small' className='icon-styled'/>Copy PGN to Clipboard
+            <ContentCopyIcon fontSize='small' className='icon-styled'/>PGN to Clipboard
+          </Button>
+          <Button onClick={(event)=>{event.preventDefault();navigator.clipboard.writeText(props.position);}}>
+            <ContentCopyIcon fontSize='small' className='icon-styled'/>FEN to Clipboard
           </Button>
           <MovesTable history={transformMovesInArray(props.history)} />
         </RightContainer>
