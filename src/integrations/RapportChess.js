@@ -60,7 +60,7 @@ class RapportChess extends Component {
     };
 
   componentDidMount() {
-    this.game = new Chess();
+    this.game = new Chess(this.props.position);
   }
 
   allowDrag = ({ piece }) => {
@@ -95,7 +95,7 @@ class RapportChess extends Component {
                 trackOfPieces: updateTrackOfPieces(this.state.trackOfPieces, move),
             }
             ));
-            this.props.parentSetHistory(this.state.history.concat(move.san));
+            this.props.parentSetProps(this.state.history.concat(move.san), this.game.fen());
             if (this.game.inCheck()) {
                 this.highlightSquare(squareKing(this.game.turn(), this.state.trackOfPieces));
             }
@@ -172,13 +172,11 @@ const squareKing = (turn, trackOfPieces) => {
     
 
 export default function RapportChessBoard(props) {
-  const position = props.position || "start";
-
   return (
     <RapportChess
-      position={position}
+      parentSetProps={props.parentSetProps}
+      position={props.position}
       rapportDisabled={props.rapportDisabled}
-      parentSetHistory={props.parentSetHistory}
       history={props.history}
       >
       {({
@@ -188,7 +186,7 @@ export default function RapportChessBoard(props) {
         onSquareRightClick,
         squareStyles }) => (
         <Chessboard
-          position={position}
+          position={props.position}
           onDrop={onDrop}
           allowDrag={allowDrag}
           orientation={props.orientation}

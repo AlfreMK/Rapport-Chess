@@ -8,7 +8,7 @@ function Rules(){
             <span>Inspired in <Link href='https://en.wikipedia.org/wiki/Richard_Rapport'>Richard Rapport's</Link> agressive chess style, this is chess variant that has the following rules:</span>
             <ul>
                 <li>All pieces (except the king) move like standard chess, with the restriction that they only move foward.</li>
-                <li>When a piece reach the 7th rank, then they can move foward or backwards for the rest of the game.</li>
+                <li>When a piece reach the 7th rank, then that piece can move foward or backwards for the rest of the game.</li>
             </ul>
         </Container>
     )
