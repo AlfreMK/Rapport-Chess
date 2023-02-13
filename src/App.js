@@ -42,9 +42,9 @@ function App() {
     setProps({...props, history: history, position: position})
     if (props.playYourself) {
       if (history.length % 2 === 1) {
-        setProps({...props, orientation: "black"});
+        setProps({...props, history: history, position: position, orientation: "black"});
       } else {
-        setProps({...props, orientation: "white"});
+        setProps({...props, history: history, position: position, orientation: "white"});
       }
     }
   }
